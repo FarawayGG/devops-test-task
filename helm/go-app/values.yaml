@@ -1,0 +1,113 @@
+# Default values for go-app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: sargsyangor/farawaygg
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.0.1"
+
+imagePullSecrets: 
+ -  name: "registry-secret"
+nameOverride: ""
+
+imageCredentials:
+  registry: docker.io
+  username: sargsyangor
+  password: Winub26gLin
+  email: "sargsyangor1992@gmail.com"
+
+containerPort: 8080
+
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: "nginx" 
+  annotations:
+#    nginx.ingresskubernetes.io/rewrite-target: /
+#  tls:
+#    - hosts:
+#        - go-app.local
+#      secretName:
+  hosts:
+    - host: go-app.local
+      paths:
+        - path: "/"
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+envVars:
+  REDIS_ADDR: redis:6379
+  test: 1
+
+cronjob:
+  scheduler: "*/2 * * * *"
+  
+
+
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: false
+      storageClass: ""
+
+  replica: 
+    replicaCount: 1
+    persistence:
+      enabled: false
+      storageClass: ""
+
+ingressController:
+  enabled: true
