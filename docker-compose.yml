@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: go
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      REDIS_ADDR: redis:6379
+    ports:
+      - "8080"
+    restart: always
+    depends_on:
+      - redis
+      - nginx
+    networks:
+      - local
+
+  nginx:
+    image: nginx:1.26.0
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./configs/conf.d:/etc/nginx/conf.d
+    restart: always
+    networks:
+      - local
+
+  redis:
+    container_name: redis
+    image: redis:7.2.4
+    ports:
+      - "6379:6379" #can be removed if there is no need to connect redis outside of application. for now it's opened for monitoring purpose
+    volumes:
+      - redis_data:/data
+    restart: always
+    networks:
+      - local
+
+networks:
+  local:
+
+volumes:
+  redis_data:

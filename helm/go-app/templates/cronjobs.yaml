@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "go-app.fullname" . }}
+  labels:
+    app: {{ include "go-app.name" . }}-cron
+spec:
+  schedule: "{{ .Values.cronjob.scheduler }}" # Make sure to enclose the schedule in quotes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ include "go-app.fullname" . }}
+            image: curlimages/curl # You may need to change this to an image that includes curl and redis-cli
+            command:
+            - /bin/sh
+            - -c
+            - |
+              app_health=$(curl -s -o /dev/null -w "%{http_code}" http://go-go-app)
+              if [[ "$app_health" == "200" ]]; then
+                  echo "Application is healthy (Status: $app_health): $(curl -s http://go-go-app)"
+              else
+                  echo "Application is unhealthy (Status: $app_health)"
+              fi
+          restartPolicy: OnFailure
