@@ -16,9 +16,9 @@ nameOverride: ""
 
 imageCredentials:
   registry: docker.io
-  username: sargsyangor
-  password: Winub26gLin
-  email: "sargsyangor1992@gmail.com"
+  username: xxx
+  password: xxx
+  email: "xx@xx.xx"
 
 containerPort: 8080
 
