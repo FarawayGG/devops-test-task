@@ -1,0 +1,11 @@
+---
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: PodPreset
+metadata:
+    name: default
+    namespace: namespace
+spec:
+    selector: {}
+    env:
+        - name: REDIS_ADDR
+          value: "localhost"

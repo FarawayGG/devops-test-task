@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: devops-test-task
+    namespace: somenamespace
+    labels:
+        k8s-app: devops-test-task
+spec:
+    replicas: 3
+    revisionHistoryLimit: 1
+    minReadySeconds: 2
+    selector:
+        matchLabels:
+            k8s-app: devops-test-task
+    strategy:
+        type: RollingUpdate
+        rollingUpdate:
+            maxUnavailable: 0
+            maxSurge: 1
+    template:
+        metadata:
+            labels:
+                k8s-app: devops-test-task
+        spec:
+            containers:
+                - name: devops-test-task
+                  image: devops-test-task:version
+                  imagePullPolicy: Always
+                  env:
+                      - name: REDIS_ADDR_CAN_BE_HERE_TOO
+                        valueFrom:
+                           secretKeyRef:
+                               name: devops-test-task
+                               key: secret
+                  resources:
+                      limits:
+                          cpu: 50m
+                          memory: 32Mi
+                      requests:
+                          cpu: 5m
+                          memory: 8Mi
+                  ports:
+                      - name: http
+                        containerPort: 8080
+                  livenessProbe:
+                      httpGet:
+                          path: /
+                          port: http
+                  readinessProbe:
+                      httpGet:
+                          path: /
+                          port: http
+                  volumeMounts:
+                      - name: tmp
+                        mountPath: /tmp
+                  securityContext:
+                      readOnlyRootFilesystem: true
+                      runAsNonRoot: true
+                      allowPrivilegeEscalation: false
+            volumes:
+                - name: tmp
+                  emptyDir:
+                      sizeLimit: "16Mi"

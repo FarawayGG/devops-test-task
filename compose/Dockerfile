@@ -1,0 +1,5 @@
+ARG GOLANG_VERSION
+FROM golang:${GOLANG_VERSION}-alpine3.19
+WORKDIR /opt
+COPY ../src /opt
+EXPOSE 8080
