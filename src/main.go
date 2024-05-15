@@ -3,17 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
-	"net/http"
-	"os"
 	"github.com/go-redis/redis/v8"
 	"github.com/julienschmidt/httprouter"
 	"go.uber.org/zap"
+	"log"
+	"net/http"
+	"os"
 	"time"
 )
 
 type server struct {
-	redis redis.UniversalClient
+	redis  redis.UniversalClient
 	logger *zap.Logger
 }
 
@@ -30,7 +30,7 @@ func main() {
 	})
 
 	srv := &server{
-		redis: rdb,
+		redis:  rdb,
 		logger: logger,
 	}
 
@@ -38,7 +38,7 @@ func main() {
 
 	router.GET("/", srv.indexHandler)
 
-	logger.Info("server started on port 8080")
+	logger.Info("server started on 8080")
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 

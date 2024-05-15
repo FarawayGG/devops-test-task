@@ -1,0 +1,38 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+    name: somenamespace-in
+    namespace: somenamespace
+spec:
+    podSelector: {}
+    policyTypes:
+        - Ingress
+    ingress:
+        - ports:
+              - port: 8080
+                protocol: TCP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+    name: somenamespace-out
+    namespace: somenamespace
+spec:
+    podSelector: {}
+    policyTypes:
+        - Egress
+    egress:
+        - to:
+              - ipBlock:
+                    cidr: 0.0.0.0/0
+                    except:
+                        - 10.0.0.0/8
+                        - 172.16.0.0/12
+                        - 192.168.0.0/16
+          ports:
+              - port: 80
+                protocol: TCP
+              - port: 443
+                protocol: TCP
