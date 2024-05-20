@@ -1,0 +1,9 @@
+dependencies:
+- name: prometheus
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 25.21.0
+- name: opensearch
+  repository: https://charts.bitnami.com/bitnami
+  version: 1.0.7
+digest: sha256:5c84a8d01503d6fe443d86a099542ce177f08856e065c7729093bd31403f0349
+generated: "2024-05-20T05:30:53.983413-04:00"

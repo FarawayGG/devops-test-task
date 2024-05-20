@@ -1,0 +1,17 @@
+apiVersion: opensearch.opster.io/v1
+kind: OpenSearchIndexPattern
+metadata:
+  name: {{ include "theapp.fullname" . }}-index-pattern
+  labels:
+    app: {{ include "theapp.name" . }}
+    chart: {{ include "theapp.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  title: "theapp-*"
+  timeFieldName: "@timestamp"
+  fields:
+    - name: "@timestamp"
+      type: "date"
+    - name: "message"
+      type: "text"

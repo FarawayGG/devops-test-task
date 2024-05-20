@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "theapp.fullname" . }}-prometheus-rules
+  labels:
+    app: {{ include "theapp.name" . }}
+    chart: {{ include "theapp.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  groups:
+  - name: theapp.rules
+    rules:
+    - alert: HighErrorRate
+      expr: |
+        rate(http_requests_total{status!~"2.."}[5m]) > 0.05
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: High error rate detected
+        description: "The error rate is above 5% for the past 10 minutes."
