@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  redis:
+    container_name: redis
+    image: redis:7.0.15
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - redis_data:/data
+    ports:
+      - 6379:6379/tcp
+    logging:
+      driver: json-file
+      options:
+        max-file: "3"
+        max-size: "100m"
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      - REDIS_ADDR="redis"
+    ports:
+      - 8080:8080/tcp
+    logging:
+      driver: json-file
+      options:
+        max-file: "3"
+        max-size: "100m"
+
+volumes:
+  redis_data:
