@@ -1,0 +1,10 @@
+1. docker-compose -f ./docker/docker/docker-compose.yml up -d
+2. along with docker, prometheus and grafana are deployed, by docker-compose ps status you can display the statuses of services and see their ports, then go to see metrics
+3. To start helm we use helm upgrade --install go-app ./helm -f ./helm/values.yaml 
+4. we can preconfigure prometheus with prometheus
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+    helm install prometheus prometheus-community/prometheus 
+in this way we get a ready prometheus + graphane in the cluster, which monitors all pods, then it is enough to go in, make an import in graphane this template, and everything will be ready 18283.
+
+

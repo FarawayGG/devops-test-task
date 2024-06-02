@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  repository: shate1/devops-test-task-faraway.com
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
